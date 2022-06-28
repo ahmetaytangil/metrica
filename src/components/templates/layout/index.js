@@ -1,5 +1,5 @@
 import Topbar from "../../UI/organisms/topbar";
-import {layout_styles} from "../../../constants/classNames";
+import {layout_styles} from "../../../constants/class_names";
 import {Col, Container, Row} from "react-bootstrap";
 
 const Layout = ({children, title}) => {

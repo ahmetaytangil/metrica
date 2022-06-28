@@ -1,51 +1,50 @@
 import Mtable from "../../UI/organisms/Mtable";
+import {connect} from "react-redux";
+import useLastWorks from "./useLastWorks";
 
-const LastWorks = () => {
-    return (
+const LastWorks = ({selected_work_order}) => {
+    const {loading, lastWorks} = useLastWorks(selected_work_order);
+
+    return !loading && lastWorks ? (
         <Mtable
             title="SON İŞLER"
+            selected_work_order={0}
             heads={[
+                {text: "TİP"},
                 {text: "İŞ EMRİ"},
-                {text: "STOK KODU"},
-                {text: "SÜRE"},
-                {text: "OPERATOR"}
+                {text: "YAYIN"},
+                {text: "SIRA"},
+                {text: "KİMLİK NO"},
+                {text: "SAĞLAM"},
+                {text: "HURDA"},
+                {text: "AKTİF KESME SÜRESİ"},
+                {text: "BAŞLANGIÇ TARİHİ"},
+                {text: "BİTİŞ TARİHİ"},
+                {text: "DURUM"},
             ]}
-            bodies={[
-                {
+            bodies={lastWorks?.map(last => {
+                return {
                     items: [
-                        {text: "XXXX"},
-                        {text: "XXXX"},
-                        {text: "XXXX"},
-                        {text: "XXXX"}
-                    ]
-                },
-                {
-                    items: [
-                        {text: "XXXX"},
-                        {text: "XXXX"},
-                        {text: "XXXX"},
-                        {text: "XXXX"}
-                    ]
-                },
-                {
-                    items: [
-                        {text: "XXXX"},
-                        {text: "XXXX"},
-                        {text: "XXXX"},
-                        {text: "XXXX"}
-                    ]
-                },
-                {
-                    items: [
-                        {text: "XXXX"},
-                        {text: "XXXX"},
-                        {text: "XXXX"},
-                        {text: "XXXX"}
+                        {text: last.type},
+                        {text: last.work_order},
+                        {text: last.broadcasting},
+                        {text: last.queue},
+                        {text: last.id_no},
+                        {text: last.solid},
+                        {text: last.scrap},
+                        {text: last.active_cutting_time},
+                        {text: last.starting_date},
+                        {text: last.ending_date},
+                        {text: last.status},
                     ]
                 }
-            ]}
+            }) || null}
         />
-    );
+    ) : null;
 };
 
-export default LastWorks;
+const mapStateToProps = (state) => ({
+    selected_work_order: state.work_order.selected
+})
+
+export default connect(mapStateToProps)(LastWorks);

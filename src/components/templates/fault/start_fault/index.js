@@ -1,31 +1,33 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ModalOpener from "../../../UI/molecules/modal_opener";
 import MainButton from "../../../UI/atoms/button/main_button";
 import {Col, Row} from "react-bootstrap";
-import {makeId} from "../../../../utils/helpers";
+import useStoreFetcher from "../../../../hooks/useStoreFetcher";
+import {PATHS} from "../../../../store/api/paths";
 
-const buttonStyles = {padding: "10px", width: '100%', height: "100px", textAlign: "center", fontSize: "16px", marginBottom: '20px'}
+const buttonStyles = {
+    padding: "10px",
+    width: '100%',
+    height: "100px",
+    textAlign: "center",
+    fontSize: "16px",
+    marginBottom: '20px'
+}
 
+const StartFault = ({handleStartFault}) => {
+    const [faultList, setFaultList] = useState(null);
+    const {loading} = useStoreFetcher(
+        faultList,
+        setFaultList,
+        PATHS.fault_list
+    )
 
-
-const StartFault = () => {
-    const buttons = [
-        {name: "BOR YAĞI EKLEME"},
-        {name: "ÇAKI DEĞİŞTİRME"},
-        {name: "ELEKTRİK KESİNTİSİ"},
-        {name: "ELEKTRONİK ARIZA"},
-        {name: "APARAT ARIZASI"},
-        {name: "GÖZ ARIZASI"},
-        {name: "İHTİYAÇ MOLASI"},
-        {name: "MEKANİK ARIZA"},
-        {name: "PT001 DİŞLİ TEKRAR"},
-        {name: "PT003 DİŞLİ TEKRAR"},
-        {name: "SIKI PARÇA TEKRARI"},
-        {name: "TALAŞ TEMİZLEME"},
-        {name: "UÇ DEĞİŞİMİ / TAKIM TELAFİSİ"},
-        {name: "YEMEK MOLASI"},
-        {name: "YENİ TAŞ YAPMA"},
-    ]
+    const buttons = faultList?.map(list => {
+        return {
+            id: list.ARIZA_DURUS_KOD || null,
+            name: list.ARIZA_DURUS_ADI || null
+        }
+    }) || null
 
     return (
         <ModalOpener
@@ -34,15 +36,22 @@ const StartFault = () => {
             button_icon="fa-play"
             footer="none"
         >
-            <Row>
-                {buttons.map(button => (
-                    <Col md={3} key={makeId()}>
-                        <MainButton sx={buttonStyles}>
-                            {button.name}
-                        </MainButton>
-                    </Col>
-                ))}
-            </Row>
+            {!loading &&
+                <Row>
+                    {buttons?.map(button => (
+                        <Col md={3} key={button.id}>
+                            {button.name &&
+                                <MainButton
+                                    sx={buttonStyles}
+                                    onClick={() => handleStartFault(button.id)}
+                                >
+                                    {button.name}
+                                </MainButton>
+                            }
+                        </Col>
+                    ))}
+                </Row>
+            }
         </ModalOpener>
     );
 };

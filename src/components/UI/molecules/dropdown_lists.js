@@ -1,6 +1,6 @@
 import {Dropdown} from "react-bootstrap";
 import {forwardRef} from "react";
-import {topbarStyles} from "../../../constants/classNames";
+import {topbarStyles} from "../../../constants/class_names";
 
 const {
     dropdown: {toggle, head, head_badge, notification, view_all}
@@ -15,8 +15,7 @@ const CustomToggle = forwardRef(
         },
         ref
     ) => (
-        <a
-            href=""
+        <button
             ref={ref}
             onClick={(e) => {
                 e.preventDefault();
@@ -25,7 +24,7 @@ const CustomToggle = forwardRef(
             className={classNames}
         >
             {children}
-        </a>
+        </button>
     )
 );
 

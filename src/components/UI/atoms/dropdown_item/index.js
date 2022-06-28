@@ -1,4 +1,4 @@
-import {topbarStyles} from "../../../../constants/classNames";
+import {topbarStyles} from "../../../../constants/class_names";
 
 const {
     dropdown_item: {
@@ -14,11 +14,12 @@ const DropdownItem = (
         text,
         media,
         minute = null,
-        small_text
+        small_text,
+        onClick
     }
 ) => {
     return (
-        <span className={root}>
+        <span className={root} onClick={onClick && onClick}>
             {minute &&
                 <small className={minuteStyle}>
                     {minute}

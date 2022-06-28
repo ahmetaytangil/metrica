@@ -10,8 +10,8 @@ export const topbarStyles = {
     buttons: "button-items",
     dropdown: {
         toggle: {
-            root_icon: "nav-link dropdown-toggle arrow-none nav-icon",
-            root: "nav-link dropdown-toggle nav-user",
+            root_icon: "nav-link dropdown-toggle arrow-none nav-icon btn",
+            root: "nav-link dropdown-toggle nav-user btn",
             inner: "d-flex align-items-center",
             arrow_small: "d-block font-11",
             arrow: "d-block fw-semibold font-12",

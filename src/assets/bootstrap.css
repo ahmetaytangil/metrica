@@ -1,11 +1,5 @@
 @import url(https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap);
 
-/*!
- * Bootstrap v5.0.2 (https://getbootstrap.com/)
- * Copyright 2011-2021 The Bootstrap Authors
- * Copyright 2011-2021 Twitter, Inc.
- * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
- */
 :root {
     --bs-blue: #0b51b7;
     --bs-indigo: #506ee4;
@@ -2654,8 +2648,6 @@ textarea.form-control-lg {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    -webkit-print-color-adjust: exact;
-    color-adjust: exact
 }
 
 .form-check-input[type=checkbox] {
@@ -13648,7 +13640,6 @@ textarea.form-control-lg {
     color: #000777 !important
 }
 
-/*# sourceMappingURL=bootstrap.min.css.map */
 pt-xxl-0 {
     padding-top: 0 !important
 }
@@ -13911,5 +13902,3 @@ pt-xxl-0 {
 .text-dark-alt {
     color: #000777 !important
 }
-
-/*# sourceMappingURL=bootstrap.min.css.map */

@@ -1,8 +1,8 @@
 import MainButton from "../../../UI/atoms/button/main_button";
 
-const EndFault = () => {
+const EndFault = ({handleEndFault}) => {
     return (
-        <MainButton icon="fa-stop">
+        <MainButton icon="fa-stop" onClick={handleEndFault}>
             BİTİR
         </MainButton>
     );

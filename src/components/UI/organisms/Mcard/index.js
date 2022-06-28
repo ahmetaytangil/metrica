@@ -1,6 +1,7 @@
 import React from 'react';
-import {card_styles} from "../../../../constants/classNames";
+import {card_styles} from "../../../../constants/class_names";
 import {Col, Row} from "react-bootstrap";
+import {makeId} from "../../../../utils/helpers";
 
 const {
     root,
@@ -9,11 +10,11 @@ const {
     body
 } = card_styles
 
-const Mcard = ({headers, children, clock}) => {
+const Mcard = ({headers, children, clock, time}) => {
     return (
         <div className={root.classNames} style={root.styles}>
             {headers.map(head => (
-                <div className={header.classNames} style={header.styles}>
+                <div key={makeId()} className={header.classNames} style={header.styles}>
                     {head.head &&
                         <h4 className={title.classNames} style={title.styles}>
                             {head.head}
@@ -21,7 +22,7 @@ const Mcard = ({headers, children, clock}) => {
                     }
                     <Row className={header.row}>
                         {head.items?.map(item => (
-                            <Col md={head.items?.length === 4 ? 3 : ""}>
+                            <Col key={makeId()} md={head.items?.length === 4 ? 3 : ""}>
                                 <h4
                                     className={title.classNames}
                                     style={title.styles_sec}
@@ -39,8 +40,10 @@ const Mcard = ({headers, children, clock}) => {
                 </div>
                 {clock !== "none" &&
                     <h4 className="mdi mdi-clock-outline">
-                        <i className="fa-solid fa-clock"></i>
-                        <span className="ms-3">00:00:00</span>
+                        <i className="fa-solid fa-clock me-2">{/*icon*/}</i>
+                        <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
+                        <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
+                        <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
                     </h4>
                 }
             </div>

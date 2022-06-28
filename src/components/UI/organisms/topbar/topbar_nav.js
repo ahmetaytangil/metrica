@@ -1,4 +1,4 @@
-import {topbarStyles} from "../../../../constants/classNames";
+import {topbarStyles} from "../../../../constants/class_names";
 
 
 const TopbarNav = ({children}) => {

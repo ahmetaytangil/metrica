@@ -3,10 +3,20 @@ import TopbarNav from "./topbar_nav";
 import TopbarButtons from "../../molecules/topbar_buttons";
 import DropdownLists from "../../molecules/dropdown_lists";
 import DropdownItem from "../../atoms/dropdown_item";
-import {topbarStyles} from "../../../../constants/classNames";
+import {topbarStyles} from "../../../../constants/class_names";
+import {connect} from "react-redux";
+import {storeUser} from "../../../../store/auth/auth.slice";
+import {storageNames} from "../../../../constants/storage_names";
 
 
-const TopBar = () => {
+const TopBar = ({user, storeUserDis}) => {
+    console.log(user)
+
+    const handleLogOut = () => {
+        storeUserDis();
+        localStorage.removeItem(storageNames.user);
+    }
+
     return (
         <div className={topbarStyles.root}>
             <nav className={topbarStyles.navbarCustom}>
@@ -64,12 +74,13 @@ const TopBar = () => {
                     />
                     <DropdownLists
                         with_arrow
-                        arrow_small_text="Bilgi İşlem"
-                        arrow_text="Buse Yapıcı"
+                        arrow_small_text={user?.section}
+                        arrow_text={user?.name_surname}
                         dropdown={
                             <DropdownItem
                                 icon="fa-solid fa-power-off"
                                 text="Logout"
+                                onClick={handleLogOut}
                             />
                         }
                     />
@@ -82,4 +93,12 @@ const TopBar = () => {
     );
 };
 
-export default TopBar;
+const mapStateToProps = (state) => ({
+    user: state.auth.user
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    storeUserDis: () => dispatch(storeUser(null))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopBar);

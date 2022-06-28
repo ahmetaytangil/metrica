@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from "../atoms/button";
-import {topbarStyles} from "../../../constants/classNames";
+import {topbarStyles} from "../../../constants/class_names";
 
 const TopbarButtons = () => {
     return (

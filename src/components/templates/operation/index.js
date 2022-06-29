@@ -24,7 +24,8 @@ const Operation = ({selected_work_order, user, onRunningChange, whichIsRunning, 
         store,
         setTime,
         user,
-        PATHS.current_operation(user.machine_no)
+        PATHS.current_operation(user.machine_no),
+        setRunning
     )
 
     useEffect(() => {

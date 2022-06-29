@@ -1,9 +1,10 @@
 import useStopWatch from "../../../hooks/useStopWatch";
 import {create} from "../../../store/api/create";
 import {PATHS} from "../../../store/api/paths";
-import {useState} from "react";
+import {useState, useEffect} from "react";
+import useCurrentVal from "../../../hooks/useCurrentVal";
 
-export default function useFault(selected_work_order, user, onRunningChange) {
+export default function useFault(selected_work_order, user, onRunningChange, work_order_list, store) {
     const [error,setError] = useState("")
     const {
         setRunning,
@@ -11,6 +12,20 @@ export default function useFault(selected_work_order, user, onRunningChange) {
         running,
         setTime
     } = useStopWatch()
+
+    useEffect(() => {
+        if (running) onRunningChange(3)
+    }, [running]);
+
+    useCurrentVal(
+        selected_work_order,
+        work_order_list,
+        store,
+        setTime,
+        user,
+        PATHS.current_fault(user.machine_no),
+        setRunning
+    )
 
     const handleStartFault = (fault_id) => {
         create()

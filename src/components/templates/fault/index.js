@@ -4,10 +4,7 @@ import StartFault from "./start_fault";
 import EndFault from "./end_fault";
 import {connect} from "react-redux";
 import useFault from "./useFault";
-import {useEffect} from "react";
-import {PATHS} from "../../../store/api/paths";
 import {storeSelectedWorkOrder,} from "../../../store/work_order/work_order.slice";
-import useCurrentVal from "../../../hooks/useCurrentVal";
 
 const Fault = (
     {
@@ -24,27 +21,13 @@ const Fault = (
         running,
         error,
         handleStartFault,
-        handleEndFault,
-        setTime
+        handleEndFault
     } = useFault(
         selected_work_order,
         user,
-        onRunningChange
-    )
-
-    useEffect(() => {
-        if (running) {
-            onRunningChange(3)
-        }
-    }, [running]);
-
-    useCurrentVal(
-        selected_work_order,
+        onRunningChange,
         work_order_list,
-        store,
-        setTime,
-        user,
-        PATHS.current_fault(user.machine_no)
+        store
     )
 
     return (

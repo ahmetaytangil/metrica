@@ -33,7 +33,8 @@ export default function usePreliminary(
         store,
         setTime,
         user,
-        PATHS.current_preliminary(user.machine_no)
+        PATHS.current_preliminary(user.machine_no),
+        setRunning
     )
 
     return {

@@ -1,7 +1,7 @@
 import React from 'react';
 import {card_styles} from "../../../../constants/class_names";
 import {Col, Row} from "react-bootstrap";
-import {makeId} from "../../../../utils/helpers";
+import {convertMsToTime, makeId} from "../../../../utils/helpers";
 
 const {
     root,
@@ -41,9 +41,7 @@ const Mcard = ({headers, children, clock, time}) => {
                 {clock !== "none" &&
                     <h4 className="mdi mdi-clock-outline">
                         <i className="fa-solid fa-clock me-2">{/*icon*/}</i>
-                        <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
-                        <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
-                        <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
+                        {convertMsToTime(time)}
                     </h4>
                 }
             </div>

@@ -15,13 +15,6 @@ export default function useStopWatch() {
         return () => clearInterval(interval);
     }, [running]);
 
-    useEffect(() => {
-        if (time !== 0 && !running) {
-            console.log('a')
-            setRunning(true)
-        }
-    }, [time, running])
-
     return {
         setRunning,
         time,

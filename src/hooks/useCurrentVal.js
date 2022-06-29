@@ -1,7 +1,7 @@
 import useStoreFetcher from "./useStoreFetcher";
 import {useEffect, useState} from "react";
 
-export default function useCurrentVal(selected_work_order, work_order_list, store, setTime, user, path) {
+export default function useCurrentVal(selected_work_order, work_order_list, store, setTime, user, path, setRunning) {
     const [currentPre, setCurrentPre] = useState(null)
 
     useStoreFetcher(
@@ -15,11 +15,12 @@ export default function useCurrentVal(selected_work_order, work_order_list, stor
             const select = work_order_list?.filter(f => f.order === currentPre[0]?.ISEMRI)[0] || null
 
             if (select) {
-                const endDate = new Date(currentPre[0]?.BASLANGIC_TARIHI)
-                const currentDate = new Date()
-                const diffInMs = Math.abs(currentDate - endDate)
+                const endDate = new Date(currentPre[0]?.BASLANGIC_TARIHI).getTime()
+                const currentDate = new Date().getTime()
+                const diffInMs = currentDate - endDate
 
-                setTime(10)
+                setTime(diffInMs)
+                setRunning(true)
                 store.storeSelectedWorkOrderDis(select);
             }
         }

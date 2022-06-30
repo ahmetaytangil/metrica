@@ -9188,3 +9188,18 @@ ul.steppedprogress li:first-child:after {
     font-weight: 700;
     text-shadow: rgba(137, 151, 189, .2) 1px 1px, rgba(137, 151, 189, .2) 2px 2px, rgba(137, 151, 189, .2) 3px 3px
 }
+
+.bg-orange {
+    background-color: orange !important;
+    color: #fff !important;
+}
+
+.bg-red {
+    background-color: red !important;
+    color: #fff !important;
+}
+
+.bg-green {
+    background-color: green !important;
+    color: #fff !important;
+}

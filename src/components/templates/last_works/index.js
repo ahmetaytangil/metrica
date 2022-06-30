@@ -5,6 +5,8 @@ import useLastWorks from "./useLastWorks";
 const LastWorks = ({selected_work_order}) => {
     const {loading, lastWorks} = useLastWorks(selected_work_order);
 
+    console.log('lastWorks',lastWorks)
+
     return !loading && lastWorks ? (
         <Mtable
             title="SON İŞLER"

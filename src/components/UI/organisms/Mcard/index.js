@@ -10,11 +10,23 @@ const {
     body
 } = card_styles
 
-const Mcard = ({headers, children, clock, time}) => {
+const Mcard = ({headers, children, clock, time, name}) => {
+    console.log(name, " ", time)
     return (
         <div className={root.classNames} style={root.styles}>
             {headers.map(head => (
-                <div key={makeId()} className={header.classNames} style={header.styles}>
+                <div
+                    key={makeId()}
+                    className={
+                        `
+                        ${header.classNames} 
+                        ${(time !== 0 && name === "01") && "bg-orange"}
+                        ${(time !== 0 && name === "02") && "bg-green"}
+                        ${(time !== 0 && name === "03") && "bg-red"}
+                        `
+                    }
+                    style={header.styles}
+                >
                     {head.head &&
                         <h4 className={title.classNames} style={title.styles}>
                             {head.head}

@@ -31,7 +31,7 @@ const Fault = (
     )
 
     return (
-        <Mcard time={time} headers={[{head: "ARIZA/DURUŞ"}, {items: []}]}>
+        <Mcard name="03" time={time} headers={[{head: "ARIZA/DURUŞ"}, {items: []}]}>
             <p>{error}</p>
             {(whichIsRunning === 0 || whichIsRunning === 3) &&
                 <>

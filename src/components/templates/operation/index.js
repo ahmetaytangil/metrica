@@ -35,7 +35,7 @@ const Operation = ({selected_work_order, user, onRunningChange, whichIsRunning, 
     }, [running])
 
     return (
-        <Mcard time={time} headers={[
+        <Mcard name="02" time={time} headers={[
             {
                 head: "OPERASYON",
                 items: [
@@ -72,12 +72,22 @@ const Operation = ({selected_work_order, user, onRunningChange, whichIsRunning, 
                     }
                     {/*<Mdk />*/}
                     {ended &&
-                        <Report
-                            user={user}
-                            selected_work_order={selected_work_order}
-                            setEnded={setEnded}
-                            setRunning={setRunning}
-                        />
+                        <>
+                            <EndOp
+                                user={user}
+                                setRunning={setRunning}
+                                selected_work_order={selected_work_order}
+                                setTime={setTime}
+                                setEnded={setEnded}
+                                onRunningChange={onRunningChange}
+                            />
+                            <Report
+                                user={user}
+                                selected_work_order={selected_work_order}
+                                setEnded={setEnded}
+                                setRunning={setRunning}
+                            />
+                        </>
                     }
                     {/*<Note />*/}
                 </>

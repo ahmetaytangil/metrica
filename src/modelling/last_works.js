@@ -1,4 +1,5 @@
 export const lastWorksModel = (data) => {
+    console.log('data',data)
     const lastWorks = (obj) => {
         return {
             type: obj.TIP || null,

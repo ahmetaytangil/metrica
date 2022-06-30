@@ -6,6 +6,7 @@ import {PATHS} from "../../../../store/api/paths";
 
 const EndWorkOrder = ({setRunning, selected_work_order, user, setTime, onRunningChange}) => {
     const [error, setError] = useState("");
+    const [show, setShow] = useState(false);
 
     const handleClick = (status) => {
         create()
@@ -19,10 +20,12 @@ const EndWorkOrder = ({setRunning, selected_work_order, user, setTime, onRunning
                 user.id_no
             ))
             .then(async result => {
-                if (result.status === 200) {
+                if (result.status === 200 && status !== "1") {
                     await setTime(0);
                     await setRunning(false);
                     await onRunningChange(0)
+                } else {
+                    setShow(false)
                 }
             })
             .catch(e => setError(e.response.data.message || e.message))
@@ -34,6 +37,8 @@ const EndWorkOrder = ({setRunning, selected_work_order, user, setTime, onRunning
             button_text="BİTİR"
             button_icon="fa-stop"
             footer="none"
+            showBew={show}
+            setShowBew={setShow}
         >
             <div className="btn-group w-100">
                 {error}

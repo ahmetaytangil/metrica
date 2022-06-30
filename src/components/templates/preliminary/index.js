@@ -42,7 +42,7 @@ const Preliminary = (
 
 
     return !loading ? (
-        <Mcard time={time} headers={[
+        <Mcard name="01" time={time} headers={[
             {
                 head: "ÖN HAZIRLIK",
                 items: [

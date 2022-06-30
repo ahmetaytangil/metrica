@@ -13,7 +13,7 @@ export default function useLastWorks(selected_work_order) {
             setLoading(true);
             get(
                 PATHS.last_works(
-                    selected_work_order?.operation,
+                    selected_work_order?.order,
                     selected_work_order?.broadcasting,
                     selected_work_order?.queue,
                     selected_work_order?.operation_no

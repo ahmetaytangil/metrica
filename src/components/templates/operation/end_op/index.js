@@ -4,11 +4,24 @@ import {useState} from "react";
 import {create} from "../../../../store/api/create";
 import {PATHS} from "../../../../store/api/paths";
 
-const EndOp = ({user, setRunning, selected_work_order, setTime, setEnded, onRunningChange}) => {
-    const [error,setError] = useState("");
+const EndOp = (
+    {
+        user,
+        setRunning,
+        selected_work_order,
+        setTime,
+        setEnded,
+        onRunningChange,
+        currentPre,
+        setCurrentPre,
+        allreset = false
+    }
+) => {
+    const [error, setError] = useState("");
     const [activeCuttingTime, setActiveCuttingTime] = useState("");
     const [solidPiece, setSolidPiece] = useState("");
     const [scrapPieces, setScrapPieces] = useState("");
+    const [show, setShow] = useState(false);
 
     const handleStopOperation = () => {
         create()
@@ -16,7 +29,7 @@ const EndOp = ({user, setRunning, selected_work_order, setTime, setEnded, onRunn
                 solidPiece,
                 scrapPieces,
                 activeCuttingTime,
-                "0",
+                currentPre?.length > 0 ? "1" : "0",
                 "1",
                 selected_work_order.order,
                 selected_work_order.broadcasting,
@@ -27,10 +40,12 @@ const EndOp = ({user, setRunning, selected_work_order, setTime, setEnded, onRunn
             ))
             .then(async result => {
                 if (result.status === 200) {
-                    await setRunning(false);
-                    await setTime(0)
-                    await setEnded(true);
-                    await onRunningChange(0)
+                    allreset && await setRunning(false);
+                    allreset && await setTime(0)
+                    await setEnded(!allreset);
+                    allreset && await onRunningChange(0);
+                    setCurrentPre([])
+                    setShow(false)
                 }
             })
             .catch(e => setError(e.message))
@@ -42,12 +57,15 @@ const EndOp = ({user, setRunning, selected_work_order, setTime, setEnded, onRunn
             button_text="BİTİR"
             button_icon="fa-stop"
             onAction={handleStopOperation}
+            showBew={show}
+            setShowBew={setShow}
         >
             <form className="form-horizontal auth-form my-4">
                 {error}
-                <FormGroups label="AKTİF KESME SÜRESİ" onChange={(e) => setActiveCuttingTime(e.target.value)} />
-                <FormGroups label="SAĞLAM ADET" onChange={(e) => setSolidPiece(e.target.value)} />
-                <FormGroups label="FİRE ADET" onChange={(e) => setScrapPieces(e.target.value)} />
+                <FormGroups label="AKTİF KESME SÜRESİ"
+                            onChange={(e) => setActiveCuttingTime(e.target.value)}/>
+                <FormGroups label="SAĞLAM ADET" onChange={(e) => setSolidPiece(e.target.value)}/>
+                <FormGroups label="FİRE ADET" onChange={(e) => setScrapPieces(e.target.value)}/>
             </form>
         </ModalOpener>
     );

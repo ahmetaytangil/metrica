@@ -4,7 +4,7 @@ import {create} from "../../../../store/api/create";
 import {PATHS} from "../../../../store/api/paths";
 import {useState} from "react";
 
-const Report = ({user, selected_work_order, setEnded, setRunning}) => {
+const Report = ({user, selected_work_order, setEnded, setRunning, setTime}) => {
     const [solidPiece, setSolidPiece] = useState(" ");
     const [scrapPieces, setScrapPieces] = useState(" ");
 
@@ -25,6 +25,7 @@ const Report = ({user, selected_work_order, setEnded, setRunning}) => {
                 if (result.status === 200) {
                     setEnded(false)
                     setRunning(false)
+                    setTime(0)
                 }
             })
     }

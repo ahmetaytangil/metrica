@@ -11,7 +11,6 @@ const {
 } = card_styles
 
 const Mcard = ({headers, children, clock, time, name}) => {
-    console.log(name, " ", time)
     return (
         <div className={root.classNames} style={root.styles}>
             {headers.map(head => (
@@ -19,10 +18,10 @@ const Mcard = ({headers, children, clock, time, name}) => {
                     key={makeId()}
                     className={
                         `
-                        ${header.classNames} 
-                        ${(time !== 0 && name === "01") && "bg-orange"}
-                        ${(time !== 0 && name === "02") && "bg-green"}
-                        ${(time !== 0 && name === "03") && "bg-red"}
+                            ${header.classNames}
+                            ${(name === "01" && time !== 0) && " bg-orange"}
+                            ${(name === "02" && time !== 0) && " bg-green"}
+                            ${(name === "03" && time !== 0) && " bg-red"}
                         `
                     }
                     style={header.styles}

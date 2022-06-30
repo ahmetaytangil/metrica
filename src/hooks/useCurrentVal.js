@@ -25,4 +25,9 @@ export default function useCurrentVal(selected_work_order, work_order_list, stor
             }
         }
     }, [currentPre, work_order_list, selected_work_order])
+
+    return {
+        currentPre,
+        setCurrentPre
+    }
 }

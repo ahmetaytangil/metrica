@@ -9,7 +9,16 @@ import {storeSelectedWorkOrder} from "../../../store/work_order/work_order.slice
 import useCurrentVal from "../../../hooks/useCurrentVal";
 import {PATHS} from "../../../store/api/paths";
 
-const Operation = ({selected_work_order, user, onRunningChange, whichIsRunning, store, work_order_list}) => {
+const Operation = (
+    {
+        selected_work_order,
+        user,
+        onRunningChange,
+        whichIsRunning,
+        store,
+        work_order_list
+    }
+) => {
     const [ended, setEnded] = useState(false);
     const {
         setRunning,
@@ -18,7 +27,7 @@ const Operation = ({selected_work_order, user, onRunningChange, whichIsRunning, 
         setTime
     } = useStopWatch();
 
-    useCurrentVal(
+    const {currentPre, setCurrentPre} = useCurrentVal(
         selected_work_order,
         work_order_list,
         store,
@@ -53,7 +62,7 @@ const Operation = ({selected_work_order, user, onRunningChange, whichIsRunning, 
         ]}>
             {(selected_work_order && (whichIsRunning === 0 || whichIsRunning === 2)) &&
                 <>
-                    {running ?
+                    {(running && !ended) ?
                         <EndOp
                             user={user}
                             setRunning={setRunning}
@@ -61,6 +70,8 @@ const Operation = ({selected_work_order, user, onRunningChange, whichIsRunning, 
                             setTime={setTime}
                             setEnded={setEnded}
                             onRunningChange={onRunningChange}
+                            currentPre={currentPre}
+                            setCurrentPre={setCurrentPre}
                         />
                         :
                         !ended &&
@@ -80,12 +91,16 @@ const Operation = ({selected_work_order, user, onRunningChange, whichIsRunning, 
                                 setTime={setTime}
                                 setEnded={setEnded}
                                 onRunningChange={onRunningChange}
+                                currentPre={currentPre}
+                                setCurrentPre={setCurrentPre}
+                                allreset={true}
                             />
                             <Report
                                 user={user}
                                 selected_work_order={selected_work_order}
                                 setEnded={setEnded}
                                 setRunning={setRunning}
+                                setTime={setTime}
                             />
                         </>
                     }

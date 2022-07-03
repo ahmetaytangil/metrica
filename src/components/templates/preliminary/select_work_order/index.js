@@ -3,7 +3,14 @@ import Mtable from "../../../UI/organisms/Mtable";
 import {storeSelectedWorkOrder} from "../../../../store/work_order/work_order.slice";
 import {connect} from "react-redux";
 
-const SelectWorkOrder = ({selected_work_order, storeSelected, table_list}) => {
+const SelectWorkOrder = (
+    {
+        selected_work_order,
+        storeSelected,
+        table_list,
+        disabled
+    }
+) => {
 
     return (
         <ModalOpener
@@ -11,6 +18,7 @@ const SelectWorkOrder = ({selected_work_order, storeSelected, table_list}) => {
             modal_title="İŞ EMRİ SEÇ"
             button_icon="fa-hand-pointer"
             onAction="close-modal"
+            disabled={disabled}
         >
             <Mtable
                 title="SON İŞLER"

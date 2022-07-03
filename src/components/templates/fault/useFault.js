@@ -3,9 +3,19 @@ import {create} from "../../../store/api/create";
 import {PATHS} from "../../../store/api/paths";
 import {useState, useEffect} from "react";
 import useCurrentVal from "../../../hooks/useCurrentVal";
+import {getLastWorksNoCond} from "../../../utils/helpers";
 
-export default function useFault(selected_work_order, user, onRunningChange, work_order_list, store) {
+export default function useFault(
+    selected_work_order,
+    user,
+    onRunningChange,
+    work_order_list,
+    store,
+    last_works_data
+) {
+    const [loading, setLoading] = useState(false);
     const [error,setError] = useState("")
+    const [show, setShow] = useState(false);
     const {
         setRunning,
         time,
@@ -28,22 +38,32 @@ export default function useFault(selected_work_order, user, onRunningChange, wor
     )
 
     const handleStartFault = (fault_id) => {
-        create()
-            .post(PATHS.start_fault(
-                selected_work_order.order,
-                selected_work_order.broadcasting,
-                selected_work_order.queue,
-                selected_work_order.operation_no,
-                user.machine_no,
-                user.id_no,
-                fault_id
-            ))
-            .then(result => {
-                if (result.status === 200) {
-                    setRunning(true);
-                }
-            })
-            .catch(e => setError(e.message))
+        if (!loading) {
+            create()
+                .post(PATHS.start_fault(
+                    selected_work_order.order,
+                    selected_work_order.broadcasting,
+                    selected_work_order.queue,
+                    selected_work_order.operation_no,
+                    user.machine_no,
+                    user.id_no,
+                    fault_id
+                ))
+                .then(result => {
+                    if (result.status === 200) {
+                        setRunning(true);
+                        getLastWorksNoCond(
+                            selected_work_order,
+                            last_works_data,
+                            setLoading,
+                            store.storeLastWorksDis,
+                            setError
+                        )
+                        setShow(false);
+                    }
+                })
+                .catch(e => setError(e.message))
+        }
     }
 
     const handleEndFault = () => {
@@ -54,6 +74,13 @@ export default function useFault(selected_work_order, user, onRunningChange, wor
                     await setRunning(false);
                     await setTime(0);
                     await onRunningChange(0)
+                    getLastWorksNoCond(
+                        selected_work_order,
+                        last_works_data,
+                        setLoading,
+                        store.storeLastWorksDis,
+                        setError
+                    )
                 }
             })
             .catch(e => setError(e.message))
@@ -66,6 +93,8 @@ export default function useFault(selected_work_order, user, onRunningChange, wor
         setTime,
         error,
         handleStartFault,
-        handleEndFault
+        handleEndFault,
+        show,
+        setShow
     }
 }

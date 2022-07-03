@@ -3,31 +3,58 @@ import ModalOpener from "../../../UI/molecules/modal_opener";
 import {create} from "../../../../store/api/create";
 import {PATHS} from "../../../../store/api/paths";
 import {useState} from "react";
+import {storeLastWorks} from "../../../../store/last_works/last_works.slice";
+import {connect} from "react-redux";
+import {getLastWorksNoCond} from "../../../../utils/helpers";
 
-const Report = ({user, selected_work_order, setEnded, setRunning, setTime}) => {
+const Report = (
+    {
+        user,
+        selected_work_order,
+        setEnded,
+        setRunning,
+        setTime,
+        disabled,
+        last_works_data,
+        storeLastWorksDis
+    }
+) => {
+    const [error, setError] = useState("");
     const [solidPiece, setSolidPiece] = useState(" ");
     const [scrapPieces, setScrapPieces] = useState(" ");
+    const [showDeneme, setShowDeneme] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleReport = () => {
-        create()
-            .post(PATHS.raport_operation(
-                selected_work_order.order,
-                selected_work_order.broadcasting,
-                selected_work_order.queue,
-                user.id_no,
-                selected_work_order.operation_no,
-                solidPiece,
-                scrapPieces,
-                user.machine_no,
-                "00:00:00"
-            ))
-            .then(result => {
-                if (result.status === 200) {
-                    setEnded(false)
-                    setRunning(false)
-                    setTime(0)
-                }
-            })
+        if (!loading) {
+            create()
+                .post(PATHS.raport_operation(
+                    selected_work_order.order,
+                    selected_work_order.broadcasting,
+                    selected_work_order.queue,
+                    user.id_no,
+                    selected_work_order.operation_no,
+                    solidPiece,
+                    scrapPieces,
+                    user.machine_no,
+                    "00:00:00"
+                ))
+                .then(async result => {
+                    if (result.status === 200) {
+                        await setEnded(false)
+                        await setRunning(false)
+                        await setTime(0)
+                        getLastWorksNoCond(
+                            selected_work_order,
+                            last_works_data,
+                            setLoading,
+                            storeLastWorksDis,
+                            setError
+                        )
+                    }
+                })
+        }
+        setShowDeneme(false);
     }
 
     return (
@@ -36,13 +63,31 @@ const Report = ({user, selected_work_order, setEnded, setRunning, setTime}) => {
             button_text="RAPORLA"
             button_icon="fa-file"
             onAction={handleReport}
+            showBew={showDeneme}
+            setShowBew={setShowDeneme}
+            disabled={disabled}
         >
             <form className="form-horizontal auth-form my-4">
-                <FormGroups label="RAPORLANACAK SAĞLAM ADET" onChange={(e) => setSolidPiece(e.target.value)}/>
-                <FormGroups label="RAPORLANACAK FİRE ADET" onChange={(e) => setScrapPieces(e.target.value)}/>
+                {error}
+                <FormGroups
+                    label="RAPORLANACAK SAĞLAM ADET"
+                    onChange={(e) => setSolidPiece(e.target.value)}
+                />
+                <FormGroups
+                    label="RAPORLANACAK FİRE ADET"
+                    onChange={(e) => setScrapPieces(e.target.value)}
+                />
             </form>
         </ModalOpener>
     );
 };
 
-export default Report;
+const mapStateToProps = (state) => ({
+    last_works_data: state.last_works.data
+})
+
+const mapDispatchToProps = (dispatch) => ({
+    storeLastWorksDis: (data) => dispatch(storeLastWorks(data))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Report);

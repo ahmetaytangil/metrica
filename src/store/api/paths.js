@@ -38,5 +38,7 @@ export const PATHS = {
         (material, business_center, operation, machine_no) =>
             `/api/IsEmri/getmakinekesmesuresi?malzeme=${material}&ismerkezi=${business_center}&aciklama=${operation}&tezgah=${machine_no}`,
     current_operation: (machine_no) => `/api/Operasyon/aktifoperasyonis/${machine_no}`,
-    current_fault: (machine_no) => `/api/Ariza/aktifariza/${machine_no}`
+    current_fault: (machine_no) => `/api/Ariza/aktifariza/${machine_no}`,
+    saglam_hurda: (order, broadcasting, queue, operation_no, id_no, machine_no, status) =>
+        `/api/Operasyon/saglamhurdasorgula?isemri=${order}&yayin=${broadcasting}&sira=${queue}&operasyonno=${operation_no}&kimlik_no=${id_no}&makine_no=${machine_no}&durum=${status}`
 }

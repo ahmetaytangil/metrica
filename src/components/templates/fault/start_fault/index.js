@@ -14,7 +14,14 @@ const buttonStyles = {
     marginBottom: '20px'
 }
 
-const StartFault = ({handleStartFault}) => {
+const StartFault = (
+    {
+        handleStartFault,
+        disabled,
+        showBew,
+        setShowBew
+    }
+) => {
     const [faultList, setFaultList] = useState(null);
     const {loading} = useStoreFetcher(
         faultList,
@@ -35,6 +42,9 @@ const StartFault = ({handleStartFault}) => {
             button_text="BAŞLA"
             button_icon="fa-play"
             footer="none"
+            disabled={disabled}
+            showBew={showBew}
+            setShowBew={setShowBew}
         >
             {!loading &&
                 <Row>

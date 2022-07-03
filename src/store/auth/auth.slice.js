@@ -9,7 +9,6 @@ export const authSlice = createSlice({
     },
     reducers: {
         storeUser(state, action) {
-            console.log('aa', action)
             state.user = userModel(action.payload)
         },
         storeUsers(state, action) {

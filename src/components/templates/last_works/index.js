@@ -1,11 +1,22 @@
 import Mtable from "../../UI/organisms/Mtable";
 import {connect} from "react-redux";
 import useLastWorks from "./useLastWorks";
+import {storeLastWorks} from "../../../store/last_works/last_works.slice";
 
-const LastWorks = ({selected_work_order}) => {
-    const {loading, lastWorks} = useLastWorks(selected_work_order);
+const LastWorks = (
+    {
+        selected_work_order,
+        last_works_data,
+        storeLastWorksDis
+    }
+) => {
+    const {loading} = useLastWorks(
+        selected_work_order,
+        last_works_data,
+        storeLastWorksDis
+    );
 
-    return !loading && lastWorks ? (
+    return !loading && last_works_data ? (
         <Mtable
             title="SON İŞLER"
             selected_work_order={0}
@@ -19,10 +30,10 @@ const LastWorks = ({selected_work_order}) => {
                 {text: "HURDA"},
                 {text: "AKTİF KESME SÜRESİ"},
                 {text: "BAŞLANGIÇ TARİHİ"},
-                {text: "BİTİŞ TARİHİ"},
                 {text: "DURUM"},
             ]}
-            bodies={lastWorks?.map(last => {
+            bodies={last_works_data?.map(last => {
+                const date = new Date(last.starting_date).toLocaleString('tr-TR')
                 return {
                     items: [
                         {text: last.type},
@@ -33,9 +44,8 @@ const LastWorks = ({selected_work_order}) => {
                         {text: last.solid},
                         {text: last.scrap},
                         {text: last.active_cutting_time},
-                        {text: last.starting_date},
-                        {text: last.ending_date},
-                        {text: last.status},
+                        {text: date},
+                        {text: String(last.status)},
                     ]
                 }
             }) || null}
@@ -44,7 +54,12 @@ const LastWorks = ({selected_work_order}) => {
 };
 
 const mapStateToProps = (state) => ({
-    selected_work_order: state.work_order.selected
+    selected_work_order: state.work_order.selected,
+    last_works_data: state.last_works.data
 })
 
-export default connect(mapStateToProps)(LastWorks);
+const mapDispatchToProps = (dispatch) => ({
+    storeLastWorksDis: (data) => dispatch(storeLastWorks(data))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LastWorks);

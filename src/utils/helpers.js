@@ -1,3 +1,7 @@
+import {get} from "../store/api/get";
+import {PATHS} from "../store/api/paths";
+import {lastWorksModel} from "../modelling/last_works";
+
 export const makeId = () => {
     return Math.floor(Math.random() * 100000000000) + 100000000000
 }
@@ -31,4 +35,60 @@ export function convertMsToTime(milliseconds) {
     return `${padTo2Digits(hours)}:${padTo2Digits(minutes)}:${padTo2Digits(
         seconds,
     )}`;
+}
+
+export function colorCond(whichIsRunning, isHeader = false) {
+    const header = isHeader ? "-header" : ""
+
+    return whichIsRunning === 1
+        ? (" bg-orange" + header)
+        : whichIsRunning === 2
+            ? (" bg-green" + header)
+            : whichIsRunning === 3
+                ? (" bg-red" + header)
+                : "";
+}
+
+export function getLastWorks(
+    selected_work_order,
+    lastWorks,
+    setLoading,
+    setLastWorks,
+    setError
+) {
+    if (selected_work_order && !lastWorks) {
+        setLoading(true);
+        get(
+            PATHS.last_works(
+                selected_work_order?.order,
+                selected_work_order?.broadcasting,
+                selected_work_order?.queue,
+                selected_work_order?.operation_no
+            ),
+            (data) => setLastWorks(lastWorksModel(data)),
+            setError,
+            setLoading(false)
+        );
+    }
+}
+
+export function getLastWorksNoCond(
+    selected_work_order,
+    lastWorks,
+    setLoading,
+    setLastWorks,
+    setError
+) {
+    setLoading(true);
+    get(
+        PATHS.last_works(
+            selected_work_order?.order,
+            selected_work_order?.broadcasting,
+            selected_work_order?.queue,
+            selected_work_order?.operation_no
+        ),
+        (data) => setLastWorks(lastWorksModel(data)),
+        setError,
+        setLoading(false)
+    );
 }

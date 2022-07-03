@@ -9,9 +9,7 @@ import {storeUser} from "../../../../store/auth/auth.slice";
 import {storageNames} from "../../../../constants/storage_names";
 
 
-const TopBar = ({user, storeUserDis}) => {
-    console.log(user)
-
+const TopBar = ({user, storeUserDis, title}) => {
     const handleLogOut = () => {
         storeUserDis();
         localStorage.removeItem(storageNames.user);
@@ -20,74 +18,79 @@ const TopBar = ({user, storeUserDis}) => {
     return (
         <div className={topbarStyles.root}>
             <nav className={topbarStyles.navbarCustom}>
-                <TopbarNav>
-                    <DropdownLists
-                        with_button
-                        dropdown_head="Notifications"
-                        dropdown_head_small="2"
-                        dropdown={
-                            <>
+                <h2 className="ps-4">
+                    {title}
+                </h2>
+                <div>
+                    <TopbarNav>
+                        <DropdownLists
+                            with_button
+                            dropdown_head="Notifications"
+                            dropdown_head_small="2"
+                            dropdown={
+                                <>
+                                    <DropdownItem
+                                        media
+                                        text="Your order is placed"
+                                        small_text="Dummy text of the printing and industry."
+                                        minute="2 min ago"
+                                        icon="fa-solid fa-chart-pie"
+                                    />
+                                    <DropdownItem
+                                        media
+                                        text="Your order is placed"
+                                        small_text="Dummy text of the printing and industry."
+                                        minute="2 min ago"
+                                        icon="fa-solid fa-camera"
+                                    />
+                                    <DropdownItem
+                                        media
+                                        text="Your order is placed"
+                                        small_text="Dummy text of the printing and industry."
+                                        minute="2 min ago"
+                                        icon="fa-solid fa-user"
+                                    />
+                                    <DropdownItem
+                                        media
+                                        text="Your order is placed"
+                                        small_text="Dummy text of the printing and industry."
+                                        minute="2 min ago"
+                                        icon="fa-solid fa-chart-pie"
+                                    />
+                                    <DropdownItem
+                                        media
+                                        text="Your order is placed"
+                                        small_text="Dummy text of the printing and industry."
+                                        minute="2 min ago"
+                                        icon="fa-solid fa-camera"
+                                    />
+                                    <DropdownItem
+                                        media
+                                        text="Your order is placed"
+                                        small_text="Dummy text of the printing and industry."
+                                        minute="2 min ago"
+                                        icon="fa-solid fa-user"
+                                    />
+                                </>
+                            }
+                        />
+                        <DropdownLists
+                            with_arrow
+                            arrow_small_text={user?.section}
+                            arrow_text={user?.name_surname}
+                            dropdown={
                                 <DropdownItem
-                                    media
-                                    text="Your order is placed"
-                                    small_text="Dummy text of the printing and industry."
-                                    minute="2 min ago"
-                                    icon="fa-solid fa-chart-pie"
+                                    icon="fa-solid fa-power-off"
+                                    text="Logout"
+                                    onClick={handleLogOut}
                                 />
-                                <DropdownItem
-                                    media
-                                    text="Your order is placed"
-                                    small_text="Dummy text of the printing and industry."
-                                    minute="2 min ago"
-                                    icon="fa-solid fa-camera"
-                                />
-                                <DropdownItem
-                                    media
-                                    text="Your order is placed"
-                                    small_text="Dummy text of the printing and industry."
-                                    minute="2 min ago"
-                                    icon="fa-solid fa-user"
-                                />
-                                <DropdownItem
-                                    media
-                                    text="Your order is placed"
-                                    small_text="Dummy text of the printing and industry."
-                                    minute="2 min ago"
-                                    icon="fa-solid fa-chart-pie"
-                                />
-                                <DropdownItem
-                                    media
-                                    text="Your order is placed"
-                                    small_text="Dummy text of the printing and industry."
-                                    minute="2 min ago"
-                                    icon="fa-solid fa-camera"
-                                />
-                                <DropdownItem
-                                    media
-                                    text="Your order is placed"
-                                    small_text="Dummy text of the printing and industry."
-                                    minute="2 min ago"
-                                    icon="fa-solid fa-user"
-                                />
-                            </>
-                        }
-                    />
-                    <DropdownLists
-                        with_arrow
-                        arrow_small_text={user?.section}
-                        arrow_text={user?.name_surname}
-                        dropdown={
-                            <DropdownItem
-                                icon="fa-solid fa-power-off"
-                                text="Logout"
-                                onClick={handleLogOut}
-                            />
-                        }
-                    />
-                </TopbarNav>
-                <TopbarNav>
-                    <TopbarButtons/>
-                </TopbarNav>
+                            }
+                        />
+                    </TopbarNav>
+                    <TopbarNav>
+                        <TopbarButtons/>
+                    </TopbarNav>
+                </div>
             </nav>
         </div>
     );

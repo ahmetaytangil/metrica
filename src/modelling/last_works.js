@@ -1,5 +1,4 @@
 export const lastWorksModel = (data) => {
-    console.log('data',data)
     const lastWorks = (obj) => {
         return {
             type: obj.TIP || null,
@@ -10,8 +9,7 @@ export const lastWorksModel = (data) => {
             solid: obj.SAGLAM || null,
             scrap: obj.HURDA || null,
             active_cutting_time: obj.AKTIF_KESME_SURESI || null,
-            starting_date: obj.BASLANGIC_TARIHI || null,
-            ending_date: obj.BITIS_TARIHI || null,
+            starting_date: obj.ISLEM_TARIHI || null,
             status: obj.DURUM || null,
         }
     }

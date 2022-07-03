@@ -8,18 +8,21 @@ import {useEffect, useState} from "react";
 import {storeSelectedWorkOrder} from "../../../store/work_order/work_order.slice";
 import useCurrentVal from "../../../hooks/useCurrentVal";
 import {PATHS} from "../../../store/api/paths";
+import {setWhichIsRunning} from "../../../store/conditions/conditions.slice";
+import Mdk from "./mdk";
+import Note from "./note";
+import {create} from "../../../store/api/create";
 
 const Operation = (
     {
-        selected_work_order,
         user,
-        onRunningChange,
-        whichIsRunning,
         store,
-        work_order_list
+        selected_work_order,
+        work_order_list,
+        whichIsRunning
     }
 ) => {
-    const [ended, setEnded] = useState(false);
+    const [saglamHurda, setSaglamHurda] = useState(null);
     const {
         setRunning,
         time,
@@ -38,75 +41,76 @@ const Operation = (
     )
 
     useEffect(() => {
+        if (selected_work_order) {
+            create()
+                .get(PATHS.saglam_hurda(
+                    selected_work_order?.order,
+                    selected_work_order?.broadcasting,
+                    selected_work_order?.queue,
+                    selected_work_order?.operation_no,
+                    user.id_no,
+                    user.machine_no,
+                    "1"
+                ))
+                .then(result => {
+                    if (result.status === 200) {
+                        setSaglamHurda(result.data)
+                    }
+                })
+        }
+
+    }, [selected_work_order, running])
+
+    useEffect(() => {
         if (running) {
-            onRunningChange(2)
+            store.onRunningChange(2)
         }
     }, [running])
 
+    let kalan_adet = "KALAN ADET: " + (saglamHurda ? (String(Number(selected_work_order?.number_of_work_orders) - (Number(saglamHurda[0]?.SAGLAM) + Number(saglamHurda[0]?.HURDA)))) : "-")
+
     return (
-        <Mcard name="02" time={time} headers={[
+        <Mcard time={time} headers={[
             {
                 head: "OPERASYON",
                 items: [
-                    {title: "PT0-110 - PT0-110"}
+                    {title: `${selected_work_order?.business_center_2 || ""} - ${selected_work_order?.operation || ""}` }
                 ]
             },
             {
                 items: [
-                    {title: "KALAN ADET: 1000"},
-                    {title: "BİTEN SAĞLAM: 400"},
-                    {title: "BİTEN FİRE: 3"},
-                    {title: "RAPORLANAN ADET: 200"}
+                    {title: kalan_adet},
+                    {title: "BİTEN SAĞLAM: " + (saglamHurda && saglamHurda[0]?.SAGLAM || "-")},
+                    {title: "BİTEN FİRE: " + (saglamHurda && saglamHurda[0]?.HURDA || "-")},
+                    {title: "RAPORLANAN ADET: " + (saglamHurda && saglamHurda[0]?.RAPORLANAN_ADET || "-")}
                 ]
             }
         ]}>
-            {(selected_work_order && (whichIsRunning === 0 || whichIsRunning === 2)) &&
-                <>
-                    {(running && !ended) ?
-                        <EndOp
-                            user={user}
-                            setRunning={setRunning}
-                            selected_work_order={selected_work_order}
-                            setTime={setTime}
-                            setEnded={setEnded}
-                            onRunningChange={onRunningChange}
-                            currentPre={currentPre}
-                            setCurrentPre={setCurrentPre}
-                        />
-                        :
-                        !ended &&
-                        <StartOp
-                            user={user}
-                            setRunning={setRunning}
-                            selected_work_order={selected_work_order}
-                        />
-                    }
-                    {/*<Mdk />*/}
-                    {ended &&
-                        <>
-                            <EndOp
-                                user={user}
-                                setRunning={setRunning}
-                                selected_work_order={selected_work_order}
-                                setTime={setTime}
-                                setEnded={setEnded}
-                                onRunningChange={onRunningChange}
-                                currentPre={currentPre}
-                                setCurrentPre={setCurrentPre}
-                                allreset={true}
-                            />
-                            <Report
-                                user={user}
-                                selected_work_order={selected_work_order}
-                                setEnded={setEnded}
-                                setRunning={setRunning}
-                                setTime={setTime}
-                            />
-                        </>
-                    }
-                    {/*<Note />*/}
-                </>
-            }
+            <StartOp
+                user={user}
+                setRunning={setRunning}
+                selected_work_order={selected_work_order}
+                disabled={!selected_work_order || running || (whichIsRunning !== 0 && whichIsRunning !== 2)}
+            />
+            <EndOp
+                user={user}
+                setRunning={setRunning}
+                selected_work_order={selected_work_order}
+                setTime={setTime}
+                onRunningChange={store.onRunningChange}
+                currentPre={currentPre}
+                setCurrentPre={setCurrentPre}
+                disabled={running === false}
+            />
+            <Report
+                user={user}
+                selected_work_order={selected_work_order}
+                setRunning={setRunning}
+                setTime={setTime}
+                disabled={!selected_work_order}
+            />
+            <Mdk disabled={true}/>
+            <Note disabled={true}/>
         </Mcard>
     );
 };
@@ -114,12 +118,14 @@ const Operation = (
 const mapStateToProps = (state) => ({
     selected_work_order: state.work_order.selected,
     user: state.auth.user,
-    work_order_list: state.work_order.list
+    work_order_list: state.work_order.list,
+    whichIsRunning: state.conditions.which_is_running
 })
 
 const mapDispatchToProps = (dispatch) => ({
     store: {
-        storeSelectedWorkOrderDis: (data) => dispatch(storeSelectedWorkOrder(data))
+        storeSelectedWorkOrderDis: (data) => dispatch(storeSelectedWorkOrder(data)),
+        onRunningChange: (num) => dispatch(setWhichIsRunning(num))
     }
 })
 

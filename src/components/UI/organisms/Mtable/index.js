@@ -38,7 +38,13 @@ const Mtable = (
                                     {bodies?.map(body => {
                                         return (
                                             <tr
-                                                style={selected_work_order !== 0 && selected_work_order?.order === body?.that?.order
+                                                style={
+                                                (selected_work_order !== 0
+                                                    && (
+                                                        selected_work_order?.order === body?.that?.order
+                                                        && selected_work_order?.operation_no === body?.that?.operation_no
+                                                    )
+                                                )
                                                     ? {backgroundColor: 'grey', color: 'white'}
                                                     : {
                                                         backgroundColor: 'transparent',

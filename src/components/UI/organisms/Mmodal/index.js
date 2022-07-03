@@ -14,7 +14,7 @@ const Mmodal = ({show, onHide, onAction, children, title, footer}) => {
             size="xl"
             centered
         >
-            <Modal.Header style={m_modal.header} closeButton>
+            <Modal.Header style={m_modal.header}>
                 <Modal.Title style={m_modal.title}>
                     {title}
                 </Modal.Title>
@@ -24,9 +24,20 @@ const Mmodal = ({show, onHide, onAction, children, title, footer}) => {
             </Modal.Body>
             {footer !== "none" &&
                 <Modal.Footer>
-                    <Button onClick={onAction === "close-modal" ? onHide : onAction} sx={{width: '100%'}}>
-                        BİTİR
-                    </Button>
+                    <div className="d-flex align-items-center w-100">
+                        <Button
+                            onClick={onAction === "close-modal" ? onHide : onAction}
+                            sx={{width: '50%', display: 'block'}}
+                        >
+                            BİTİR
+                        </Button>
+                        <Button
+                            onClick={onHide}
+                            sx={{width: '50%', display: 'block'}}
+                        >
+                            İptal
+                        </Button>
+                    </div>
                 </Modal.Footer>
             }
         </Modal>

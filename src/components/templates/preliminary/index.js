@@ -9,6 +9,7 @@ import {
     storeWorkOrderList
 } from "../../../store/work_order/work_order.slice";
 import {useEffect, useState} from "react";
+import {setWhichIsRunning} from "../../../store/conditions/conditions.slice";
 
 const Preliminary = (
     {
@@ -16,8 +17,7 @@ const Preliminary = (
         store,
         user,
         selected_work_order,
-        whichIsRunning,
-        onRunningChange
+        whichIsRunning
     }
 ) => {
     const [currentCTime, setCurrentCTime] = useState(null)
@@ -36,13 +36,12 @@ const Preliminary = (
 
     useEffect(() => {
         if (running) {
-            onRunningChange(1)
+            store.onRunningChange(1)
         }
     }, [running])
 
-
     return !loading ? (
-        <Mcard name="01" time={time} headers={[
+        <Mcard time={time} headers={[
             {
                 head: "ÖN HAZIRLIK",
                 items: [
@@ -52,34 +51,32 @@ const Preliminary = (
             },
             {
                 items: [
-                    {title: `İŞ EMRİ ADETİ: ${currentCTime && currentCTime[0].MIN_ST || "0"}`},
+                    {title: `İŞ EMRİ ADETİ: ${selected_work_order?.number_of_work_orders || "0"}`},
                     {title: `EN KISA SÜRE: ${currentCTime && currentCTime[0].MIN_MK || "0"}`}
                 ]
             }
         ]}>
-            {(whichIsRunning === 0 || whichIsRunning === 1) &&
+            <SelectWorkOrder
+                table_list={work_order_list}
+                disabled={running || whichIsRunning !== 0}
+            />
+            {selected_work_order &&
                 <>
-                    {running ?
-                        <EndWorkOrder
-                            setRunning={setRunning}
-                            selected_work_order={selected_work_order}
-                            user={user}
-                            setTime={setTime}
-                            onRunningChange={onRunningChange}
-                        />
-                        :
-                        <>
-                            <SelectWorkOrder table_list={work_order_list}/>
-                            {selected_work_order &&
-                                <StartWorkOrder
-                                    setRunning={setRunning}
-                                    selected_work_order={selected_work_order}
-                                    user={user}
-                                    currentCTime={setCurrentCTime}
-                                />
-                            }
-                        </>
-                    }
+                    <StartWorkOrder
+                        setRunning={setRunning}
+                        selected_work_order={selected_work_order}
+                        user={user}
+                        currentCTime={setCurrentCTime}
+                        disabled={!selected_work_order || running || (whichIsRunning !== 0 && whichIsRunning !== 1)}
+                    />
+                    <EndWorkOrder
+                        setRunning={setRunning}
+                        selected_work_order={selected_work_order}
+                        user={user}
+                        setTime={setTime}
+                        onRunningChange={store.onRunningChange}
+                        disabled={running === false}
+                    />
                 </>
             }
         </Mcard>
@@ -95,7 +92,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     store: {
         storeWorkOrderListDis: (data) => dispatch(storeWorkOrderList(data)),
-        storeSelectedWorkOrderDis: (data) => dispatch(storeSelectedWorkOrder(data))
+        storeSelectedWorkOrderDis: (data) => dispatch(storeSelectedWorkOrder(data)),
+        onRunningChange: (num) => dispatch(setWhichIsRunning(num))
     }
 })
 

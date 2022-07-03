@@ -5,7 +5,7 @@ export const general = {
 
 export const topbarStyles = {
     root: "topbar",
-    navbarCustom: "navbar-custom",
+    navbarCustom: "navbar-custom d-flex justify-content-between",
     topbarNav: "list-unstyled topbar-nav float-end mb-1",
     buttons: "button-items",
     dropdown: {
@@ -39,9 +39,9 @@ export const topbarStyles = {
 }
 
 export const layout_styles = {
-    root: "page-wrapper",
+    root: "page-wrapper ",
     root_style: {backgroundColor: "rgb(236, 233, 233)"},
-    content: "page-content-tab",
+    content: "page-content-tab pt-5",
     page_title_box: "page-title-box",
     page_title: "page-title"
 }
@@ -75,7 +75,7 @@ export const card_styles = {
     body: {
         root: {
             classNames: "card-body",
-            styles: {backgroundColor: "rgb(236, 233, 233)", border: "5px solid white"}
+            styles: {backgroundColor: "rgb(236, 233, 233)", border: "1px solid white"}
         },
         button_items: {
             classNames: "button-items",

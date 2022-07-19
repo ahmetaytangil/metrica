@@ -7,14 +7,10 @@ export default function usePreliminary(
     work_order_list,
     store,
     user,
-    selected_work_order
+    selected_work_order,
+    running
 ) {
-    const {
-        setRunning,
-        time,
-        running,
-        setTime
-    } = useStopWatch()
+    const {time, setTime} = useStopWatch(running)
 
     const {loading} = useStoreFetcher(
         work_order_list,
@@ -34,14 +30,12 @@ export default function usePreliminary(
         setTime,
         user,
         PATHS.current_preliminary(user.machine_no),
-        setRunning
+        store.setRunning
     )
 
     return {
         loading,
-        setRunning,
         time,
-        running,
         setTime
     }
 }

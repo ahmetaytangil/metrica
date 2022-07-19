@@ -5,8 +5,8 @@ import {connect} from "react-redux";
 import {colorCond} from "../../../utils/helpers";
 
 
-const Layout = ({children, title, whichIsRunning}) => {
-    const color_conditions = colorCond(whichIsRunning);
+const Layout = ({children, title, whichIsRunning, faultRunning}) => {
+    const color_conditions = colorCond(whichIsRunning, false, faultRunning);
 
     return (
         <>
@@ -26,7 +26,8 @@ const Layout = ({children, title, whichIsRunning}) => {
 };
 
 const mapStateToProps = (state) => ({
-    whichIsRunning: state.conditions.which_is_running
+    whichIsRunning: state.conditions.which_is_running,
+    faultRunning: state.conditions.fault_running
 })
 
 export default connect(mapStateToProps)(Layout);

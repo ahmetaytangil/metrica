@@ -11,21 +11,14 @@ export default function useFault(
     onRunningChange,
     work_order_list,
     store,
-    last_works_data
+    last_works_data,
+    running,
+    whichIsRunning
 ) {
     const [loading, setLoading] = useState(false);
     const [error,setError] = useState("")
     const [show, setShow] = useState(false);
-    const {
-        setRunning,
-        time,
-        running,
-        setTime
-    } = useStopWatch()
-
-    useEffect(() => {
-        if (running) onRunningChange(3)
-    }, [running]);
+    const {time, setTime} = useStopWatch(running)
 
     useCurrentVal(
         selected_work_order,
@@ -34,7 +27,7 @@ export default function useFault(
         setTime,
         user,
         PATHS.current_fault(user.machine_no),
-        setRunning
+        store.setRunning
     )
 
     const handleStartFault = (fault_id) => {
@@ -51,14 +44,16 @@ export default function useFault(
                 ))
                 .then(result => {
                     if (result.status === 200) {
-                        setRunning(true);
+                        store.setRunning(true);
                         getLastWorksNoCond(
                             selected_work_order,
                             last_works_data,
                             setLoading,
                             store.storeLastWorksDis,
                             setError
-                        )
+                        );
+                        store.setPreliminaryRunningDis(false);
+                        store.setOperationRunningDis(false);
                         setShow(false);
                     }
                 })
@@ -71,7 +66,7 @@ export default function useFault(
             .post(PATHS.stop_fault(user.machine_no))
             .then(async result => {
                 if (result.status === 200) {
-                    await setRunning(false);
+                    await store.setRunning(false);
                     await setTime(0);
                     await onRunningChange(0)
                     getLastWorksNoCond(
@@ -80,17 +75,19 @@ export default function useFault(
                         setLoading,
                         store.storeLastWorksDis,
                         setError
-                    )
+                    );
+                    if (whichIsRunning === 1) {
+                        store.setPreliminaryRunningDis(true);
+                    } else if (whichIsRunning === 2) {
+                        store.setOperationRunningDis(true);
+                    }
                 }
             })
             .catch(e => setError(e.message))
     }
 
     return {
-        setRunning,
         time,
-        running,
-        setTime,
         error,
         handleStartFault,
         handleEndFault,

@@ -17,7 +17,8 @@ const Mcard = (
         children,
         clock,
         time,
-        whichIsRunning
+        whichIsRunning,
+        faultRunning
     }
 ) => {
     return (
@@ -27,7 +28,7 @@ const Mcard = (
                     <div
                         key={makeId()}
                         className={
-                            header.classNames + colorCond(whichIsRunning, index === 0 && true)
+                            header.classNames + colorCond(whichIsRunning, index === 0 && true, faultRunning)
                         }
                         style={header.styles}
                     >
@@ -52,7 +53,7 @@ const Mcard = (
                 )
             })}
             <div
-                className={body.root.classNames + colorCond(whichIsRunning)}
+                className={body.root.classNames + colorCond(whichIsRunning, false, faultRunning)}
                 style={body.root.styles}
             >
                 <div className={body.button_items.classNames} style={body.button_items.styles}>
@@ -70,7 +71,8 @@ const Mcard = (
 };
 
 const mapStateToProps = (state) => ({
-    whichIsRunning: state.conditions.which_is_running
+    whichIsRunning: state.conditions.which_is_running,
+    faultRunning: state.conditions.fault_running
 })
 
 export default connect(mapStateToProps)(Mcard);

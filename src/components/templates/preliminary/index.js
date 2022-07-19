@@ -9,7 +9,7 @@ import {
     storeWorkOrderList
 } from "../../../store/work_order/work_order.slice";
 import {useEffect, useState} from "react";
-import {setWhichIsRunning} from "../../../store/conditions/conditions.slice";
+import {setPreliminaryRunning, setWhichIsRunning} from "../../../store/conditions/conditions.slice";
 
 const Preliminary = (
     {
@@ -17,21 +17,21 @@ const Preliminary = (
         store,
         user,
         selected_work_order,
-        whichIsRunning
+        whichIsRunning,
+        running
     }
 ) => {
     const [currentCTime, setCurrentCTime] = useState(null)
     const {
         loading,
-        setRunning,
         time,
-        running,
         setTime
     } = usePreliminary(
         work_order_list,
         store,
         user,
-        selected_work_order
+        selected_work_order,
+        running
     );
 
     useEffect(() => {
@@ -63,19 +63,19 @@ const Preliminary = (
             {selected_work_order &&
                 <>
                     <StartWorkOrder
-                        setRunning={setRunning}
+                        setRunning={store.setRunning}
                         selected_work_order={selected_work_order}
                         user={user}
                         currentCTime={setCurrentCTime}
                         disabled={!selected_work_order || running || (whichIsRunning !== 0 && whichIsRunning !== 1)}
                     />
                     <EndWorkOrder
-                        setRunning={setRunning}
+                        setRunning={store.setRunning}
                         selected_work_order={selected_work_order}
                         user={user}
                         setTime={setTime}
                         onRunningChange={store.onRunningChange}
-                        disabled={running === false}
+                        disabled={!running}
                     />
                 </>
             }
@@ -86,14 +86,16 @@ const Preliminary = (
 const mapStateToProps = (state) => ({
     work_order_list: state.work_order.list,
     selected_work_order: state.work_order.selected,
-    user: state.auth.user
+    user: state.auth.user,
+    running: state.conditions.preliminary_running
 })
 
 const mapDispatchToProps = (dispatch) => ({
     store: {
         storeWorkOrderListDis: (data) => dispatch(storeWorkOrderList(data)),
         storeSelectedWorkOrderDis: (data) => dispatch(storeSelectedWorkOrder(data)),
-        onRunningChange: (num) => dispatch(setWhichIsRunning(num))
+        onRunningChange: (num) => dispatch(setWhichIsRunning(num)),
+        setRunning: (bool) => dispatch(setPreliminaryRunning(bool))
     }
 })
 

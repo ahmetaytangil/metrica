@@ -7,11 +7,7 @@ import {connect} from "react-redux";
 const TimeCols = ({whichIsRunning}) => {
     return (
         <Row>
-            <Col lg={6} style={
-                {
-                    width: "-webkit-fill-available"
-                }
-            }>
+            <Col lg={6} style={{width: "-webkit-fill-available"}}>
                 <div className="card-group mb-3 text-center">
                     <Preliminary whichIsRunning={whichIsRunning}/>
                     <Operation whichIsRunning={whichIsRunning}/>

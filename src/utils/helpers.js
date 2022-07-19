@@ -15,7 +15,7 @@ export const saveLocalStorage = (data, key) => {
 }
 
 export const getFromLocalStorage = (key) => {
-   return JSON.parse(localStorage.getItem(key));
+    return JSON.parse(localStorage.getItem(key));
 }
 
 function padTo2Digits(num) {
@@ -37,15 +37,15 @@ export function convertMsToTime(milliseconds) {
     )}`;
 }
 
-export function colorCond(whichIsRunning, isHeader = false) {
+export function colorCond(whichIsRunning, isHeader = false, faultRunning) {
     const header = isHeader ? "-header" : ""
 
-    return whichIsRunning === 1
-        ? (" bg-orange" + header)
-        : whichIsRunning === 2
-            ? (" bg-green" + header)
-            : whichIsRunning === 3
-                ? (" bg-red" + header)
+    return faultRunning
+        ? (" bg-red" + header)
+        : whichIsRunning === 1
+            ? (" bg-orange" + header)
+            : whichIsRunning === 2
+                ? (" bg-green" + header)
                 : "";
 }
 

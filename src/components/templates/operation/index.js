@@ -29,6 +29,24 @@ function getKalanAdetNumber(saglamHurda, selected_work_order) {
     return saglamHurda ? Number(selected_work_order?.number_of_work_orders) - (Number(saglamHurda[0]?.SAGLAM) + Number(saglamHurda[0]?.HURDA)) : selected_work_order?.number_of_work_orders
 }
 
+function extractedCurrentPre(selected_work_order, user, setSaglamHurda) {
+    create()
+        .get(PATHS.saglam_hurda(
+            selected_work_order?.order,
+            selected_work_order?.broadcasting,
+            selected_work_order?.queue,
+            selected_work_order?.operation_no,
+            user.id_no,
+            user.machine_no,
+            "1"
+        ))
+        .then(result => {
+            if (result.status === 200) {
+                setSaglamHurda(result.data)
+            }
+        })
+}
+
 const Operation = (
     {
         user,
@@ -55,21 +73,7 @@ const Operation = (
 
     useEffect(() => {
         if (selected_work_order) {
-            create()
-                .get(PATHS.saglam_hurda(
-                    selected_work_order?.order,
-                    selected_work_order?.broadcasting,
-                    selected_work_order?.queue,
-                    selected_work_order?.operation_no,
-                    user.id_no,
-                    user.machine_no,
-                    "1"
-                ))
-                .then(result => {
-                    if (result.status === 200) {
-                        setSaglamHurda(result.data)
-                    }
-                })
+            extractedCurrentPre(selected_work_order, user, (data) => setSaglamHurda(data));
         }
 
     }, [selected_work_order, running])
@@ -125,6 +129,7 @@ const Operation = (
                 disabled={!selected_work_order}
                 saglam={saglamHurda && saglamHurda[0]?.SAGLAM}
                 hurda={saglamHurda && saglamHurda[0]?.HURDA}
+                exrat={() => extractedCurrentPre(selected_work_order, user, (data) => setSaglamHurda(data))}
             />
             <Mdk disabled={true}/>
             <Note disabled={true}/>

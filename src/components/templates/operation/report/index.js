@@ -11,14 +11,14 @@ const Report = (
     {
         user,
         selected_work_order,
-        setEnded,
         setRunning,
         setTime,
         disabled,
         last_works_data,
         storeLastWorksDis,
         saglam,
-        hurda
+        hurda,
+        exrat
     }
 ) => {
     const [error, setError] = useState("");
@@ -50,9 +50,8 @@ const Report = (
                     ))
                     .then(async result => {
                         if (result.status === 200) {
-                            await setEnded(false)
-                            await setRunning(false)
-                            await setTime(0)
+                            setRunning(false)
+                            setTime(0)
                             getLastWorksNoCond(
                                 selected_work_order,
                                 last_works_data,
@@ -60,9 +59,10 @@ const Report = (
                                 storeLastWorksDis,
                                 setError
                             )
+                            exrat()
                         }
                     })
-                setShowDeneme(false);
+                    .finally(() => setShowDeneme(false))
             }
         }
 

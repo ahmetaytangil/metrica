@@ -26,7 +26,7 @@ function getKalanAdet(saglamHurda, selected_work_order) {
 }
 
 function getKalanAdetNumber(saglamHurda, selected_work_order) {
-    return Number(selected_work_order?.number_of_work_orders) - (Number(saglamHurda[0]?.SAGLAM) + Number(saglamHurda[0]?.HURDA))
+    return saglamHurda ? Number(selected_work_order?.number_of_work_orders) - (Number(saglamHurda[0]?.SAGLAM) + Number(saglamHurda[0]?.HURDA)) : selected_work_order?.number_of_work_orders
 }
 
 const Operation = (
@@ -115,6 +115,7 @@ const Operation = (
                 setCurrentPre={setCurrentPre}
                 disabled={running === false}
                 onShowKalan={() => setShowKalanPopup(true)}
+                kalan_adet={getKalanAdetNumber(saglamHurda, selected_work_order)}
             />
             <Report
                 user={user}

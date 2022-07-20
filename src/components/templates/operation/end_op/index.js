@@ -18,7 +18,8 @@ const EndOp = (
         setCurrentPre,
         last_works_data,
         storeLastWorksDis,
-        onShowKalan
+        onShowKalan,
+        kalan_adet
     }
 ) => {
     const [error, setError] = useState("");
@@ -29,39 +30,48 @@ const EndOp = (
     const [loading, setLoading] = useState(false);
 
     const handleStopOperation = () => {
+        console.log(kalan_adet)
+        console.log(scrapPieces)
+        console.log(solidPiece)
+        console.log(Number(kalan_adet) < (Number(solidPiece) + Number(scrapPieces)))
         if (!loading) {
-            create()
-                .post(PATHS.stop_operation(
-                    solidPiece,
-                    scrapPieces,
-                    activeCuttingTime,
-                    "0",
-                    "1",
-                    selected_work_order.order,
-                    selected_work_order.broadcasting,
-                    selected_work_order.queue,
-                    selected_work_order.operation_no,
-                    user.machine_no,
-                    user.id_no
-                ))
-                .then(async result => {
-                    if (result.status === 200) {
-                        setRunning(false);
-                        setTime(0)
-                        onRunningChange(0);
-                        setCurrentPre([])
-                        setShow(false);
-                        getLastWorksNoCond(
-                            selected_work_order,
-                            last_works_data,
-                            setLoading,
-                            storeLastWorksDis,
-                            setError
-                        );
-                        onShowKalan();
-                    }
-                })
-                .catch(e => setError(e.message))
+            if (Number(kalan_adet) < (Number(solidPiece) + Number(scrapPieces))) {
+                setError("İŞ EMRİ DEĞERİNDEN FAZLA ADET RAPORLAYAMAZSINIZ")
+            } else {
+                create()
+                    .post(PATHS.stop_operation(
+                        solidPiece,
+                        scrapPieces,
+                        activeCuttingTime,
+                        "0",
+                        "1",
+                        selected_work_order.order,
+                        selected_work_order.broadcasting,
+                        selected_work_order.queue,
+                        selected_work_order.operation_no,
+                        user.machine_no,
+                        user.id_no
+                    ))
+                    .then(async result => {
+                        if (result.status === 200) {
+                            setRunning(false);
+                            setTime(0)
+                            onRunningChange(0);
+                            setCurrentPre([])
+                            setShow(false);
+                            getLastWorksNoCond(
+                                selected_work_order,
+                                last_works_data,
+                                setLoading,
+                                storeLastWorksDis,
+                                setError
+                            );
+                            onShowKalan();
+                        }
+                    })
+                    .catch(e => setError(e.message))
+            }
+
         }
     }
 
@@ -76,7 +86,7 @@ const EndOp = (
             disabled={disabled}
         >
             <form className="form-horizontal auth-form my-4">
-                {error}
+                <p style={{color: 'red', fontSize: 20, textAlign: 'center'}}>{error}</p>
                 <FormGroups
                     label="AKTİF KESME SÜRESİ"
                     onChange={(e) => setActiveCuttingTime(e.target.value)}

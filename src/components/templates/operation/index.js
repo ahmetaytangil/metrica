@@ -16,12 +16,17 @@ import {
 import Mdk from "./mdk";
 import Note from "./note";
 import {create} from "../../../store/api/create";
+import KalanAdetPopup from "../../UI/molecules/kalan_adet_popup";
 
 function getKalanAdet(saglamHurda, selected_work_order) {
     return "KALAN ADET: " + (saglamHurda
             ? (String(Number(selected_work_order?.number_of_work_orders) - (Number(saglamHurda[0]?.SAGLAM) + Number(saglamHurda[0]?.HURDA))))
             : "-"
     );
+}
+
+function getKalanAdetNumber(saglamHurda, selected_work_order) {
+    return Number(selected_work_order?.number_of_work_orders) - (Number(saglamHurda[0]?.SAGLAM) + Number(saglamHurda[0]?.HURDA))
 }
 
 const Operation = (
@@ -36,6 +41,7 @@ const Operation = (
 ) => {
     const [saglamHurda, setSaglamHurda] = useState(null);
     const {time, setTime} = useStopWatch(running);
+    const [showKalanPopup, setShowKalanPopup] = useState(false);
 
     const {currentPre, setCurrentPre} = useCurrentVal(
         selected_work_order,
@@ -108,6 +114,7 @@ const Operation = (
                 currentPre={currentPre}
                 setCurrentPre={setCurrentPre}
                 disabled={running === false}
+                onShowKalan={() => setShowKalanPopup(true)}
             />
             <Report
                 user={user}
@@ -115,9 +122,17 @@ const Operation = (
                 setRunning={store.setRunning}
                 setTime={setTime}
                 disabled={!selected_work_order}
+                saglam={saglamHurda && saglamHurda[0]?.SAGLAM}
+                hurda={saglamHurda && saglamHurda[0]?.HURDA}
             />
             <Mdk disabled={true}/>
             <Note disabled={true}/>
+            <KalanAdetPopup
+                show={showKalanPopup}
+                onHide={() => setShowKalanPopup(false)}
+            >
+                <p style={{fontSize: 20, textAlign: 'center', fontWeight: 700}}>{kalan_adet}</p>
+            </KalanAdetPopup>
         </Mcard>
     );
 };

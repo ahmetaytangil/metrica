@@ -12,7 +12,8 @@ const ModalOpener = (
         onAction,
         showBew,
         setShowBew,
-        disabled
+        disabled,
+        noStart
     }
 ) => {
     const [show, setShow] = useState(false);
@@ -49,6 +50,7 @@ const ModalOpener = (
                     title={modal_title}
                     footer={footer}
                     onAction={onAction}
+                    noStart={noStart}
                 >
                     {children}
                 </Mmodal>

@@ -41,10 +41,10 @@ const StartFault = (
             modal_title="ARIZA SEÇ"
             button_text="BAŞLA"
             button_icon="fa-play"
-            footer="none"
             disabled={disabled}
             showBew={showBew}
             setShowBew={setShowBew}
+            noStart={true}
         >
             {!loading &&
                 <Row>

@@ -6,7 +6,7 @@ const {
     m_modal
 } = card_styles
 
-const Mmodal = ({show, onHide, onAction, children, title, footer}) => {
+const Mmodal = ({show, onHide, onAction, children, title, footer, noStart}) => {
     return (
         <Modal
             show={show}
@@ -25,15 +25,17 @@ const Mmodal = ({show, onHide, onAction, children, title, footer}) => {
             {footer !== "none" &&
                 <Modal.Footer>
                     <div className="d-flex align-items-center w-100">
-                        <Button
-                            onClick={onAction === "close-modal" ? onHide : onAction}
-                            sx={{width: '50%', display: 'block'}}
-                        >
-                            BİTİR
-                        </Button>
+                        {!noStart &&
+                            <Button
+                                onClick={onAction === "close-modal" ? onHide : onAction}
+                                sx={{width: '50%', display: 'block'}}
+                            >
+                                BİTİR
+                            </Button>
+                        }
                         <Button
                             onClick={onHide}
-                            sx={{width: '50%', display: 'block'}}
+                            sx={{width: noStart ? "100%" : '50%', display: 'block'}}
                         >
                             İptal
                         </Button>

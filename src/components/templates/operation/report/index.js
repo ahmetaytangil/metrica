@@ -16,7 +16,9 @@ const Report = (
         setTime,
         disabled,
         last_works_data,
-        storeLastWorksDis
+        storeLastWorksDis,
+        saglam,
+        hurda
     }
 ) => {
     const [error, setError] = useState("");
@@ -27,34 +29,43 @@ const Report = (
 
     const handleReport = () => {
         if (!loading) {
-            create()
-                .post(PATHS.raport_operation(
-                    selected_work_order.order,
-                    selected_work_order.broadcasting,
-                    selected_work_order.queue,
-                    user.id_no,
-                    selected_work_order.operation_no,
-                    solidPiece,
-                    scrapPieces,
-                    user.machine_no,
-                    "00:00:00"
-                ))
-                .then(async result => {
-                    if (result.status === 200) {
-                        await setEnded(false)
-                        await setRunning(false)
-                        await setTime(0)
-                        getLastWorksNoCond(
-                            selected_work_order,
-                            last_works_data,
-                            setLoading,
-                            storeLastWorksDis,
-                            setError
-                        )
-                    }
-                })
+            const T = Number(saglam) + Number(hurda)
+            const B = Number(solidPiece) + Number(scrapPieces)
+            if (T < B) {
+                setError("Bitirilen Adetten fazla raporlama yapılamaz")
+            } else if (T === 0) {
+                setError("Lütfen Değer Giriniz")
+            } else {
+                create()
+                    .post(PATHS.raport_operation(
+                        selected_work_order.order,
+                        selected_work_order.broadcasting,
+                        selected_work_order.queue,
+                        user.id_no,
+                        selected_work_order.operation_no,
+                        solidPiece,
+                        scrapPieces,
+                        user.machine_no,
+                        "00:00:00"
+                    ))
+                    .then(async result => {
+                        if (result.status === 200) {
+                            await setEnded(false)
+                            await setRunning(false)
+                            await setTime(0)
+                            getLastWorksNoCond(
+                                selected_work_order,
+                                last_works_data,
+                                setLoading,
+                                storeLastWorksDis,
+                                setError
+                            )
+                        }
+                    })
+                setShowDeneme(false);
+            }
         }
-        setShowDeneme(false);
+
     }
 
     return (
@@ -68,14 +79,20 @@ const Report = (
             disabled={disabled}
         >
             <form className="form-horizontal auth-form my-4">
-                {error}
+                <p style={{color: 'red', fontSize: 20, textAlign: 'center'}}>{error}</p>
                 <FormGroups
                     label="RAPORLANACAK SAĞLAM ADET"
                     onChange={(e) => setSolidPiece(e.target.value)}
+                    type="number"
+                    min={0}
+                    max={saglam}
                 />
                 <FormGroups
                     label="RAPORLANACAK FİRE ADET"
                     onChange={(e) => setScrapPieces(e.target.value)}
+                    type="number"
+                    min={0}
+                    max={hurda}
                 />
             </form>
         </ModalOpener>

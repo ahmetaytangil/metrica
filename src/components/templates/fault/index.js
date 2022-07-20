@@ -11,6 +11,7 @@ import {
     setWhichIsRunning
 } from "../../../store/conditions/conditions.slice";
 import {storeLastWorks} from "../../../store/last_works/last_works.slice";
+import MainButton from "../../UI/atoms/button/main_button";
 
 const Fault = (
     {

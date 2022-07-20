@@ -17,7 +17,8 @@ const EndOp = (
         disabled,
         setCurrentPre,
         last_works_data,
-        storeLastWorksDis
+        storeLastWorksDis,
+        onShowKalan
     }
 ) => {
     const [error, setError] = useState("");
@@ -56,7 +57,8 @@ const EndOp = (
                             setLoading,
                             storeLastWorksDis,
                             setError
-                        )
+                        );
+                        onShowKalan();
                     }
                 })
                 .catch(e => setError(e.message))
